@@ -18,8 +18,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-static char build_date[] = __DATE__ " at "__TIME__;
-
 #include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -1559,8 +1557,6 @@ static void handle_args(int argc, char *argv[])
 		case 'V':
 			fprintf(stderr, "btreplay -- version %s\n", 
 				my_btversion);
-			fprintf(stderr, "            Built on %s\n", 
-				build_date);
 			exit(0);
 			/*NOTREACHED*/
 
