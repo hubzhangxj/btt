@@ -16,8 +16,8 @@ int main(int argc, char *argv[])
 	unsigned int seq;
 	FILE *f;
 
-#ifdef _SC_NPROCESSORS_CONF
-	MAX_CPUS = sysconf(_SC_NPROCESSORS_CONF);
+#ifdef _SC_NPROCESSORS_ONLN
+	MAX_CPUS = sysconf(_SC_NPROCESSORS_ONLN);
 	if (MAX_CPUS < 1)
 	{
 		fprintf(stderr, "Could not determine number of CPUs online:\n%s\n", 

@@ -502,8 +502,8 @@ static inline void start_iter(void)
  */
 static void get_ncpus(void)
 {
-#ifdef _SC_NPROCESSORS_CONF
-	ncpus = sysconf(_SC_NPROCESSORS_CONF);
+#ifdef _SC_NPROCESSORS_ONLN
+	ncpus = sysconf(_SC_NPROCESSORS_ONLN);
 #else
 	int nrcpus = 4096;
 	cpu_set_t * cpus;
