@@ -550,7 +550,7 @@ static void pin_to_cpu(struct thr_info *tip)
 
 	assert(0 <= tip->cpu && tip->cpu < ncpus);
 
-	CPU_ZERO_S(ncpus, cpus);
+	CPU_ZERO_S(size, cpus);
 	CPU_SET_S(tip->cpu, size, cpus);
 	if (sched_setaffinity(getpid(), size, cpus)) {
 		fatal("sched_setaffinity", ERR_SYSCALL, "Failed to pin CPU\n");
