@@ -275,7 +275,7 @@ static inline int is_send_done(struct thr_info *tip)
  */
 static inline int is_reap_done(struct thr_info *tip)
 {
-	return tip->send_done && tip->naios_out == 0;
+	return signal_done || (tip->send_done && tip->naios_out == 0);
 }
 
 /**
