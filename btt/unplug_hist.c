@@ -34,11 +34,11 @@ void *unplug_hist_alloc(struct d_info *dip)
 {
 	struct hist_bkt *hbp;
 
-	if (unplug_hist_name == NULL) return NULL;
+	if (unplug_hist_name == NULL)
+		return NULL;
 
-	hbp = malloc(sizeof(*hbp));
+	hbp = calloc(1, sizeof(*hbp));
 	hbp->dip = dip;
-	memset(hbp->hist, 0, NBKTS * sizeof(int));
 
 	return hbp;
 }
