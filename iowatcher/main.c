@@ -815,12 +815,12 @@ static void plot_tput(struct plot *plot, unsigned int min_seconds,
 		if (tf->tput_writes_gld->max > 0) {
 			svg_line_graph(plot, tf->tput_writes_gld, tf->writes_color, 0, 0);
 			if (with_legend)
-				svg_add_legend(plot, tf->label, "Writes", tf->writes_color);
+				svg_add_legend(plot, tf->label, " Writes", tf->writes_color);
 		}
 		if (tf->tput_reads_gld->max > 0) {
 			svg_line_graph(plot, tf->tput_reads_gld, tf->reads_color, 0, 0);
 			if (with_legend)
-				svg_add_legend(plot, tf->label, "Reads", tf->reads_color);
+				svg_add_legend(plot, tf->label, " Reads", tf->reads_color);
 		}
 	}
 
