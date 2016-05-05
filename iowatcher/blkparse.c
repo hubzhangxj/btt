@@ -1097,6 +1097,8 @@ void add_pending_io(struct trace *trace, struct graph_line_data *gld)
 		return;
 
 	if (action == __BLK_TA_QUEUE) {
+		if (io->sector == 0)
+			return;
 		if (trace->found_issue || trace->found_completion) {
 			pio = hash_queued_io(trace->io);
 			/*
