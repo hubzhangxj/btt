@@ -991,6 +991,7 @@ static void plot_queue_depth(struct plot *plot, unsigned int min_seconds,
 			     unsigned int max_seconds)
 {
 	struct trace_file *tf;
+	u64 max = 0, val;
 
 	if (active_graphs[QUEUE_DEPTH_GRAPH_INDEX] == 0)
 		return;
@@ -1000,9 +1001,17 @@ static void plot_queue_depth(struct plot *plot, unsigned int min_seconds,
 	if (num_traces > 1)
 		svg_alloc_legend(plot, num_traces);
 
-	tf = list_entry(all_traces.next, struct trace_file, list);
+	list_for_each_entry(tf, &all_traces, list) {
+		val = line_graph_roll_avg_max(tf->queue_depth_gld);
+		if (val > max)
+			max = val;
+	}
+
+	list_for_each_entry(tf, &all_traces, list)
+		tf->queue_depth_gld->max = max;
+
 	set_ylabel(plot, "Pending IO");
-	set_yticks(plot, num_yticks, 0, tf->queue_depth_gld->max, "");
+	set_yticks(plot, num_yticks, 0, max, "");
 	set_xticks(plot, num_xticks, min_seconds, max_seconds);
 
 	list_for_each_entry(tf, &all_traces, list) {
