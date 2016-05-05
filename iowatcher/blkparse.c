@@ -1097,8 +1097,17 @@ void add_pending_io(struct trace *trace, struct graph_line_data *gld)
 		return;
 
 	if (action == __BLK_TA_QUEUE) {
-		if (trace->found_issue || trace->found_completion)
-			hash_queued_io(trace->io);
+		if (trace->found_issue || trace->found_completion) {
+			pio = hash_queued_io(trace->io);
+			/*
+			 * When there are no ISSUE events count depth and
+			 * latency at least from queue events
+			 */
+			if (pio && !trace->found_issue) {
+				pio->dispatch_time = io->time;
+				goto account_io;
+			}
+		}
 		return;
 	}
 	if (action == __BLK_TA_REQUEUE) {
@@ -1118,6 +1127,7 @@ void add_pending_io(struct trace *trace, struct graph_line_data *gld)
 		free(pio);
 	}
 
+account_io:
 	ios_in_flight++;
 
 	seconds = SECONDS(io->time);
