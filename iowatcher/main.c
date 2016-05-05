@@ -328,7 +328,10 @@ static void read_traces(void)
 	char *path = NULL;
 
 	list_for_each_entry(tf, &all_traces, list) {
-		path = join_path(blktrace_dest_dir, tf->filename);
+		if (num_blktrace_devices)
+			path = join_path(blktrace_dest_dir, tf->filename);
+		else
+			path = strdup(tf->filename);
 
 		trace = open_trace(path);
 		if (!trace)
