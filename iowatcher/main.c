@@ -429,9 +429,9 @@ static void read_trace_events(void)
 
 		first_record(trace);
 		do {
+			check_record(trace);
 			if (SECONDS(get_record_time(trace)) > tf->max_seconds)
 				continue;
-			check_record(trace);
 			add_tput(trace, tf->tput_writes_gld, tf->tput_reads_gld);
 			add_iop(trace, tf->iop_gld);
 			add_io(trace, tf);
