@@ -137,6 +137,7 @@ char *pick_fio_color(void);
 char *pick_cpu_color(void);
 void reset_cpu_color(void);
 int svg_io_graph(struct plot *plot, struct graph_dot_data *gdd);
+double line_graph_roll_avg_max(struct graph_line_data *gld);
 int svg_line_graph(struct plot *plot, struct graph_line_data *gld, char *color, int thresh1, int thresh2);
 struct graph_line_data *alloc_line_data(unsigned int min_seconds, unsigned int max_seconds, unsigned int stop_seconds);
 struct graph_dot_data *alloc_dot_data(unsigned int min_seconds, unsigned int max_seconds, u64 min_offset, u64 max_offset, unsigned int stop_seconds, char *color, char *label);

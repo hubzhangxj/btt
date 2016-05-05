@@ -774,7 +774,7 @@ static void plot_tput(struct plot *plot, unsigned int min_seconds,
 	struct trace_file *tf;
 	char *units;
 	char line[128];
-	u64 max = 0;
+	u64 max = 0, val;
 
 	if (active_graphs[TPUT_GRAPH_INDEX] == 0)
 		return;
@@ -783,10 +783,12 @@ static void plot_tput(struct plot *plot, unsigned int min_seconds,
 		svg_alloc_legend(plot, num_traces * 2);
 
 	list_for_each_entry(tf, &all_traces, list) {
-		if (tf->tput_writes_gld->max > max)
-			max = tf->tput_writes_gld->max;
-		if (tf->tput_reads_gld->max > max)
-			max = tf->tput_reads_gld->max;
+		val = line_graph_roll_avg_max(tf->tput_writes_gld);
+		if (val > max)
+			max = val;
+		val = line_graph_roll_avg_max(tf->tput_reads_gld);
+		if (val > max)
+			max = val;
 	}
 	list_for_each_entry(tf, &all_traces, list) {
 		if (tf->tput_writes_gld->max > 0)
@@ -835,7 +837,7 @@ static void plot_fio_tput(struct plot *plot,
 	struct trace_file *tf;
 	char *units;
 	char line[128];
-	u64 max = 0;
+	u64 max = 0, val;
 
 	if (num_fio_traces == 0 || active_graphs[FIO_GRAPH_INDEX] == 0)
 		return;
@@ -844,8 +846,9 @@ static void plot_fio_tput(struct plot *plot,
 		svg_alloc_legend(plot, num_fio_traces);
 
 	list_for_each_entry(tf, &fio_traces, list) {
-		if (tf->fio_gld->max > max)
-			max = tf->fio_gld->max;
+		val = line_graph_roll_avg_max(tf->fio_gld);
+		if (val > max)
+			max = val;
 	}
 
 	list_for_each_entry(tf, &fio_traces, list) {
@@ -1190,7 +1193,7 @@ static void plot_latency(struct plot *plot, unsigned int min_seconds,
 	struct trace_file *tf;
 	char *units;
 	char line[128];
-	u64 max = 0;
+	u64 max = 0, val;
 
 	if (active_graphs[LATENCY_GRAPH_INDEX] == 0)
 		return;
@@ -1199,8 +1202,9 @@ static void plot_latency(struct plot *plot, unsigned int min_seconds,
 		svg_alloc_legend(plot, num_traces);
 
 	list_for_each_entry(tf, &all_traces, list) {
-		if (tf->latency_gld->max > max)
-			max = tf->latency_gld->max;
+		val = line_graph_roll_avg_max(tf->latency_gld);
+		if (val > max)
+			max = val;
 	}
 
 	list_for_each_entry(tf, &all_traces, list)
@@ -1236,14 +1240,15 @@ static void plot_iops(struct plot *plot, unsigned int min_seconds,
 {
 	struct trace_file *tf;
 	char *units;
-	u64 max = 0;
+	u64 max = 0, val;
 
 	if (active_graphs[IOPS_GRAPH_INDEX] == 0)
 		return;
 
 	list_for_each_entry(tf, &all_traces, list) {
-		if (tf->iop_gld->max > max)
-			max = tf->iop_gld->max;
+		val = line_graph_roll_avg_max(tf->iop_gld);
+		if (val > max)
+			max = val;
 	}
 
 	list_for_each_entry(tf, &all_traces, list)

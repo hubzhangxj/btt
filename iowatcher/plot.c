@@ -759,6 +759,29 @@ void scale_line_graph_time(u64 *max, char **units)
 	*max /= div;
 }
 
+static int rolling_span(struct graph_line_data *gld)
+{
+	if (rolling_avg_secs)
+		return rolling_avg_secs;
+	return (gld->stop_seconds - gld->min_seconds) / 25;
+}
+
+
+double line_graph_roll_avg_max(struct graph_line_data *gld)
+{
+	unsigned int i;
+	int rolling;
+	double avg, max = 0;
+
+	rolling = rolling_span(gld);
+	for (i = gld->min_seconds; i < gld->stop_seconds; i++) {
+		avg = rolling_avg(gld->data, i, rolling);
+		if (avg > max)
+			max = avg;
+	}
+	return max;
+}
+
 int svg_line_graph(struct plot *plot, struct graph_line_data *gld, char *color, int thresh1, int thresh2)
 {
 	unsigned int i;
@@ -776,10 +799,8 @@ int svg_line_graph(struct plot *plot, struct graph_line_data *gld, char *color, 
 
 	if (thresh1 && thresh2)
 		rolling = 0;
-	else if (rolling_avg_secs)
-		rolling = rolling_avg_secs;
 	else
-		rolling = (gld->stop_seconds - gld->min_seconds) / 25;
+		rolling = rolling_span(gld);
 
 	for (i = gld->min_seconds; i < gld->stop_seconds; i++) {
 		avg = rolling_avg(gld->data, i, rolling);
@@ -795,7 +816,6 @@ int svg_line_graph(struct plot *plot, struct graph_line_data *gld, char *color, 
 
 		x = (double)(i - gld->min_seconds) / xscale;
 		if (!thresh1 && !thresh2) {
-
 			if (!printed_header) {
 				write_check(fd, start, strlen(start));
 				printed_header = 1;
