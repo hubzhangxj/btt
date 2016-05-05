@@ -1362,7 +1362,7 @@ static void print_usage(void)
 		"\t-C (--codec): ffmpeg codec. Use ffmpeg -codecs to list\n"
 		"\t-r (--rolling): number of seconds in the rolling averge\n"
 		"\t-T (--title): graph title\n"
-		"\t-N (--no-graph): skip a single graph (io, tput, latency, queue_depth, \n"
+		"\t-N (--no-graph): skip a single graph (io, tput, latency, queue-depth, \n"
 		"\t\t\tiops, cpu-sys, cpu-io, cpu-irq cpu-soft cpu-user)\n"
 		"\t-O (--only-graph): add a single graph to the output\n"
 		"\t-h (--height): set the height of each graph\n"
