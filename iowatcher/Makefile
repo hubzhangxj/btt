@@ -19,7 +19,7 @@ all: $(ALL)
 	$(CC) -o $*.o -c $(ALL_CFLAGS) $<
 
 iowatcher: blkparse.o plot.o main.o tracers.o mpstat.o fio.o
-	$(CC) $(ALL_CFLAGS) -o $@ $(filter %.o,$^) -lm
+	$(CC) $(ALL_CFLAGS) -o $@ $(filter %.o,$^) -lm -lrt
 
 depend:
 	@$(CC) -MM $(ALL_CFLAGS) *.c 1> .depend
