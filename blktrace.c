@@ -1893,6 +1893,26 @@ static int start_tracer(int cpu)
 	return 0;
 }
 
+static int create_output_files(int cpu)
+{
+	char fname[MAXPATHLEN + 64];
+	struct list_head *p;
+	FILE *f;
+
+	__list_for_each(p, &devpaths) {
+		struct devpath *dpp = list_entry(p, struct devpath, head);
+
+		if (fill_ofname(fname, sizeof(fname), NULL, dpp->buts_name,
+				cpu))
+			return 1;
+		f = my_fopen(fname, "w+");
+		if (!f)
+			return 1;
+		fclose(f);
+	}
+	return 0;
+}
+
 static void start_tracers(void)
 {
 	int cpu, started = 0;
@@ -1900,8 +1920,16 @@ static void start_tracers(void)
 	size_t alloc_size = CPU_ALLOC_SIZE(max_cpus);
 
 	for (cpu = 0; cpu < max_cpus; cpu++) {
-		if (!CPU_ISSET_S(cpu, alloc_size, online_cpus))
+		if (!CPU_ISSET_S(cpu, alloc_size, online_cpus)) {
+			/*
+			 * Create fake empty output files so that other tools
+			 * like blkparse don't have to bother with sparse CPU
+			 * number space.
+			 */
+			if (create_output_files(cpu))
+				break;
 			continue;
+		}
 		if (start_tracer(cpu))
 			break;
 		started++;
